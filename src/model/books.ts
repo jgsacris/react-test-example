@@ -1,0 +1,5 @@
+export interface BookItem{
+  name: string;
+  id: number
+}
+
