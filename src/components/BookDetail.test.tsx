@@ -1,6 +1,8 @@
 import {render} from '@testing-library/react';
 import BookDetail from './BookDetail';
 
+
+
 describe('Book Detail', () => {
   it('renders title', () => {
     const props = {
@@ -9,9 +11,9 @@ describe('Book Detail', () => {
         name: 'Refactoring'
       }
     }
-    const container = render(<BookDetail {...props}/>);
+    const {container} = render(<BookDetail {...props}/>);
     const title = container.querySelector('.book-title');
-    expect(title.innerHTML).toEqual(props.book.name)
+    expect(title?.innerHTML).toEqual(props.book.name)
   }
   )
 });
