@@ -1,0 +1,13 @@
+.root {
+  flex-grow: 1;
+}
+/* name: {
+  maxHeight: 30,
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+},
+description: {
+  maxHeight: 40,
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+} */
