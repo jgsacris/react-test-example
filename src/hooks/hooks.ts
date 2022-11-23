@@ -2,9 +2,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { backendUrl } from "../config";
 
-export const useRemoteService = <T>(path: string, initial: T) =>{
+export const useRemoteService = <T>(initialPath: string, initialData: T) =>{
 
-  const [data, setData] = useState<T>(initial);
+  const [data, setData] = useState<T>(initialData);
+  const [path, setPath] = useState<string>(initialPath);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   useEffect(() => {
@@ -23,5 +24,5 @@ export const useRemoteService = <T>(path: string, initial: T) =>{
     }
     fetchBooks()
   }, [path])
-  return {data, loading, error}
+  return {data, loading, error, setPath}
 }
