@@ -5,6 +5,34 @@ const frontendURL = 'http://127.0.0.1:5173/';
 
 import axios from "axios";
 
+const gotoApp = () =>{
+  cy.visit(frontendURL);
+}
+
+const checkAppTitle = () => {
+  cy.get('h2[data-test="heading"]').contains('Bookish');
+}
+
+const checkBookListWith = (expectation:string[] = []) =>{
+  cy.get('div[data-test="book-list"]').should('exist');
+  cy.get('div.book-item').should((books) => {
+    expect(books).to.have.length(expectation.length);
+    const titles = [...books].map(x => x.querySelector('h2')!.innerHTML);
+    expect(titles).to.deep.equal(expectation);
+  });
+}
+
+const checkBookList = () => {
+  const bookList = ['Refactoring', 'Domain-driven design', 
+  'Building Microservices', 'Acceptance Test Driven Development with React'];
+  checkBookListWith(bookList);
+}
+
+const checkSearchResult = () => {
+  const expectation = ['Domain-driven design'];
+  checkBookListWith(expectation);
+}
+
 describe('Bookish application', function(){
 // This is no longer needed since we addeed the books.json to the stub-server
 //   before(() => {
@@ -28,32 +56,27 @@ describe('Bookish application', function(){
 //  })
 
   it('Visists the bookish', function(){
-    cy.visit(frontendURL);
-    cy.get('h2[data-test="heading').contains('Bookish');
+    gotoApp();
+    checkAppTitle();
   })
 
   it('Shows a book list', () => {
-    cy.visit(frontendURL);
+    gotoApp();
     cy.get('div[data-test="book-list"]').should('exist');
-    cy.get('div.book-item').should('have.length', 4);
-    cy.get('div.book-item').should((books)=> {
-      expect(books).to.have.length(4);
-      const titles = [...books].map(x => x.querySelector('h2')!.innerHTML);
-      
-      expect(titles).to.deep.equal(['Refactoring',  'Domain-driven design',  'Building Microservices', "Acceptance Test Driven Development with React"])
-    })
+    checkBookList();
   })
   it('opens the detail page', () => {
-    cy.visit(frontendURL);
+    gotoApp();
     cy.get('div.book-item').contains('View Details').eq(0).click();
     cy.url().should('include', '/books/1');
     cy.get('h2.book-title').contains('Refactoring');
   })
   it('Searches for a title', () =>{
-    cy.visit(frontendURL);
+    gotoApp();
     cy.get('div.book-item').should('have.length', 4);
     cy.get('[data-test="search"] input').type('design');
-    cy.get('div.book-item').should('have.length', 1);
-    cy.get('div.book-item').eq(0).contains('Domain-driven design');
+    checkSearchResult();
+    // cy.get('div.book-item').should('have.length', 1);
+    // cy.get('div.book-item').eq(0).contains('Domain-driven design');
   })
 })
